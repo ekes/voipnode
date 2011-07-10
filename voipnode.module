@@ -64,6 +64,15 @@ function voipnode_perm() {
  * Handles adding, changing, removing extensions for voipnodes.
  */
 function voipnode_nodeapi(&$node, $op, $a3 = NULL, $a4 = NULL) {
+  if (! variable_get('voipnode_use_' . $node->type, FALSE)) {
+    // @todo we have no handling for switching off node types
+    //       for now we don't deal with the extension here, unless
+    //       the node is being deleted.
+    if (! ($op == 'delete' && $node->extension_number)) {
+      return;
+    }
+  }
+
   switch ($op) {
     case 'insert':
     case 'update':
@@ -161,7 +170,7 @@ function voipnode_form_alter(&$form, &$form_state, $form_id) {
  */
 function voipnode_node_type_form_submit($form, &$form_state) {
   module_load_include('inc', 'voipnode', 'voipnode.admin');
-  _voipnode_node_type_form_submit($form, &$form_state);
+  _voipnode_node_type_form_submit($form, $form_state);
 }
 
 /**
@@ -191,14 +200,14 @@ function _voipnode_node_edit_form_alter(&$form, &$form_state, $form_id) {
     '#title' => t('Script'),
     '#description' => t('VOIP script to use for this node.'),
     '#options' => VoipScript::getScriptNames(),
-    '#default_value' => variable_get('default_script_name_'. $content_type, variable_get('voipnode_script_name','')),
+    '#default_value' => (! empty($node->voipextension_script)) ? $node->voipextension_script : variable_get('default_script_name_'. $content_type, variable_get('voipnode_script_name','')),
   );
 
   $form['voipextension_listed'] = array(
     '#type' => 'checkbox',
     '#title' => t('Listed'),
     '#description' => t('List the extension in a directory.'),
-    '#default_value' => variable_get('default_extension_status_'. $content_type, variable_get('voipnode_status', 0)),
+    '#default_value' => (isset($node->voipextension_listed)) ? $node->voipextension_listed : variable_get('default_extension_status_'. $content_type, variable_get('voipnode_status', 0)),
     '#return_value' => 1,
   );
 }
@@ -279,7 +288,7 @@ function voipnode_voipscript_get_script_names() {
 function voipnode_voipextension_title_callback(&$extension) {
   $node = node_load($extension['module_id']);
   if (isset($node->field_voipnode_aname[0])) {
-    return file_create_url(field_file_urlencode_path($node->field_voipname_aname[0]['filepath']));
+    return file_create_url(field_file_urlencode_path($node->field_voipnode_aname[0]['filepath']));
   }
   return $node->title;
 }
@@ -293,7 +302,7 @@ function voipnode_voipextension_title_callback(&$extension) {
 function voipnode_voipextension_description_callback(&$extension) {
   $node = node_load($extension['module_id']);
   if (isset($node->field_voipnode_adesc[0])) {
-    return file_create_url(field_file_urlencode_path($node->field_voipname_adesc[0]['filepath']));
+    return file_create_url(field_file_urlencode_path($node->field_voipnode_adesc[0]['filepath']));
   }
   return '';
 }
@@ -305,4 +314,8 @@ function voipnode_voipextension_description_callback(&$extension) {
  */
 function voipnode_voipextension_script_callback(&$extension) {
   $extension['script_arguments']['nid'] = $extension['module_id'];
+  if (empty($extension['script'])) {
+    // fallback shouldn't be needed later.
+    return 'voipnode_basic';
+  }
 }
