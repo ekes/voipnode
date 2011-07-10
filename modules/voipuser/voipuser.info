@@ -1,0 +1,7 @@
+name = VoIP Extension
+package = VoIP
+description = VoIP Extension module allows you to associated VoIP Extensions with users and content by using voipextension cck fields
+dependencies[] = voipnode
+dependencies[] = content_profile
+dependencies[] = content_profile_registration
+core = 6.x
