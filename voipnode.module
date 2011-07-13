@@ -15,7 +15,7 @@ function voipnode_menu() {
       'title' => 'VoIP Extensions',
       'page callback' => 'drupal_get_form',
       'page arguments' => array('voipnode_admin_settings'),
-      'access arguments' => array('administer voip node settings'),
+      'access arguments' => array('administer voipnode settings'),
       'file' => 'voipnode.admin.inc',
       );
   return $items;
@@ -181,6 +181,8 @@ function voipnode_node_type_form_submit($form, &$form_state) {
 function _voipnode_node_edit_form_alter(&$form, &$form_state, $form_id) {
   module_load_include('inc', 'voipcall', 'voipscript');
   $node = $form['#node'];
+  $content_type = $node->type;
+
   if (! empty($node->voipextension_number)) {
     // display number if set; other modules can allow extension to set number
     $form['voipextension_number'] = array(
