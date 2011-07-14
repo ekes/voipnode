@@ -125,17 +125,16 @@ function voipnode_theme() {
     ),
   );
 }
-
+*/
 /**
  * Implementation of hook_views_api().
- * @todo
+ */ 
 function voipnode_views_api() {
   return array(
-      'api' => 2,
-      'path' => drupal_get_path('module', 'voipnode') .'/views',
-      );
+    'api' => 2,
+    'path' => drupal_get_path('module', 'voipnode') .'/views',
+  );
 }
-*/
 
 /**
  * Implementation of hook_form_alter().
