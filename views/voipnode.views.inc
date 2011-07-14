@@ -9,12 +9,16 @@
  * Implementation of hook_views_data_alter().
  */
 function voipnode_views_data_alter(&$data) {
-  // trouble with doing this is it's then the only way to join on the node table
-  // guess we need a psudo table / field
-  $data['voipextension']['table']['join'] = array(
-    'node' => array(
-      'left_field' => 'nid',
-      'field' => 'module_id',
+  $data['node']['voipnode'] = array(
+    'group' => t('VoIP Extension'),
+    'title' => t('Extension'),
+    'help' => t('Relate node to VoIP extension.'),
+    'relationship' => array(
+      'handler' => 'views_handler_relationship',
+      'base' => 'voipextension',
+      'base field' => 'module_id',
+      'relationship field' => 'nid',
+      'label' => t('Extension'),
       'extra' => array(
         array('field' => 'module', 'value' => 'voipnode',),
       ),
@@ -22,7 +26,7 @@ function voipnode_views_data_alter(&$data) {
   );
 
   $data['voipextension']['voipnode'] = array(
-    'title' => t('voipnode'),
+    'title' => t('VoIP node'),
     'help' => t('Relate to VoIP nodes.'),
     'relationship' => array(
       'handler' => 'views_handler_relationship',
@@ -30,7 +34,7 @@ function voipnode_views_data_alter(&$data) {
       'base field' => 'nid',
       'relationship table' => 'voipextension',
       'relationship field' => 'module_id',
-      'label' => t('extension'),
+      'label' => t('Extension'),
       'extra' => array(
         array('table' => 'voipextension', 'field' => 'module', 'value' => 'voipnode',)
       ),
