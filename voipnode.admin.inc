@@ -156,5 +156,6 @@ function _voipnode_node_type_form_submit($form, &$form_state) {
   }
   else {
     _voipnode_change_audio_fields_status($content_type, 0);
+    fieldgroup_delete($content_type, 'group_voipnode_settings');
   }
 }
