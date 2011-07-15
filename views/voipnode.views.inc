@@ -34,7 +34,7 @@ function voipnode_views_data_alter(&$data) {
       'base field' => 'nid',
       'relationship table' => 'voipextension',
       'relationship field' => 'module_id',
-      'label' => t('Extension'),
+      'label' => t('VoIP Node'),
       'extra' => array(
         array('table' => 'voipextension', 'field' => 'module', 'value' => 'voipnode',)
       ),
