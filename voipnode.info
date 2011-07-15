@@ -1,10 +1,10 @@
 name = VoIP Node
-package = VoIP
-description = Adds cck fields audio fields for nodes to use as extensions.
+package = VoIP Drupal
+description = Adds cck audio fields for nodes to use as extensions.
 dependencies[] = content
 dependencies[] = audiofield
 dependencies[] = fieldgroup
 dependencies[] = views
-dependencies[] = number
-dependencies[] = optionwidgets
+dependencies[] = voipcall
+dependencies[] = voipextension
 core = 6.x
