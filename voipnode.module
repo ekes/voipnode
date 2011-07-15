@@ -19,30 +19,28 @@ function voipnode_menu() {
       'file' => 'voipnode.admin.inc',
       );
   return $items;
-}
+} 
 
 /**
  * Implementation of hook_menu_alter().
  *
- * Remove the unnecessary links from the secondary tab.
- * @todo would it be appropriate to allow some access to configuration form.
- * Remove access to delete the field group.
+ * Allow access to limited settings form for users with administer voipnode permissions.
+ * Remove access to delete the fields and field group.
  */
 function voipnode_menu_alter(&$items) {
+  module_load_include('inc', 'voipnode', 'voipnode.cck_fields');
   $node_types = node_get_types();
+
   foreach ($node_types as $node_type => $node_type_details) {
-    if (isset($items['admin/content/node-type/'.$node_type.'/fields/field_voipnode_aname'])) {
-      $items['admin/content/node-type/'.$node_type.'/fields/field_voipnode_aname']['access callback'] = FALSE;
+    foreach (_voipnode_audio_fields_names() as $field_name) {
+      if (isset($items['admin/content/node-type/'.$node_type.'/fields/' . $field_name])) {
+        $items['admin/content/node-type/'.$node_type.'/fields/' . $field_name]['access callback'] = 'user_access';
+        $items['admin/content/node-type/'.$node_type.'/fields/' . $field_name]['access arguments'] = array('administer voipnode settings');
+      }
+      if (isset($items['admin/content/node-type/'.$node_type.'/fields/' . $field_name .'/remove'])) {
+        $items['admin/content/node-type/'.$node_type.'/fields/' . $field_name .'/remove']['access callback'] = FALSE;
+      }
     }
-
-    if (isset($items['admin/content/node-type/'.$node_type.'/fields/field_voipnode_adesc'])) {
-      $items['admin/content/node-type/'.$node_type.'/fields/field_voipnode_adesc']['access callback'] = FALSE;
-    }
-
-    if (isset($items['admin/content/node-type/'.$node_type.'/fields/field_voipnode_agreet'])) {
-      $items['admin/content/node-type/'.$node_type.'/fields/field_voipnode_agreet']['access callback'] = FALSE;
-    }
-
     if (isset($items['admin/content/node-type/'.$node_type.'/groups/group_voipnode_settings/remove'])) {
       $items['admin/content/node-type/'.$node_type.'/groups/group_voipnode_settings/remove']['access callback'] = FALSE;
     }
@@ -148,14 +146,16 @@ function voipnode_form_alter(&$form, &$form_state, $form_id) {
     _voipnode_node_edit_form_alter($form, $form_state, $form_id);
   }
   elseif ($form_id == 'content_field_edit_form') {
-    // @todo check this.
-    if ($form['#field']['type'] == 'voipnode' && $form['#field']['module'] == 'voipnode') {
+    // content type settings form
+    module_load_include('inc', 'voipnode', 'voipnode.cck_fields');
+    $field_names = _voipnode_audio_fields_names();
+    if (! variable_get('voipnode_use_'. $form['type']['#value'], FALSE) && in_array($form['#field']['field_name'], $field_names)) {
+      // the can only be one value per voipnode_a* field.
       $form['field']['multiple']['#type'] = 'value';
-      $form['field']['multiple']['#default_value'] = 0;
-      $form['field']['multiple']['#value'] = 0;
-      $form['field']['#attributes'] = array(
-        'style' => 'display:none;'
-      );
+      $form['field']['multiple']['#default_value'] = 1;
+      $form['field']['multiple']['#value'] = 1;
+      // the description doesn't make sense at the moment.
+      $form['field']['description_field']['#type'] = 'hidden';
     }
   }
   elseif ($form_id == 'node_type_form') {

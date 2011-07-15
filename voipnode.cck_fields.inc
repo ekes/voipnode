@@ -101,6 +101,14 @@ function _voipnode_extension_group_defintion() {
 }
 
 /**
+ * Returns an array of the fields names that we control.
+ */
+function _voipnode_audio_fields_names() {
+  $definitions = _voipnode_audio_fields_definitions();
+  return array_keys($definitions);
+}
+
+/**
  * Store and returns field definitions, from audiofield cck fields
  * It stores three cck fields, Audio name, Audio description and Audio greeting
  * @param $field_type
@@ -110,7 +118,7 @@ function _voipnode_extension_group_defintion() {
  */
 function _voipnode_audio_fields_definitions($field_type = '') {
   $fields = array();
-  $fields['audio_name'] =  array (
+  $fields['field_voipnode_aname'] =  array (
     'label' => 'Audio name',
     'field_name' => 'field_voipnode_aname',
     'type' => 'filefield',
@@ -184,7 +192,7 @@ function _voipnode_audio_fields_definitions($field_type = '') {
     ),
   );
 
-  $fields['audio_description'] = array (
+  $fields['field_voipnode_adesc'] = array (
     'label' => 'Audio Description',
     'field_name' => 'field_voipnode_adesc',
     'type' => 'filefield',
@@ -258,7 +266,7 @@ function _voipnode_audio_fields_definitions($field_type = '') {
     ),
   );
 
-  $fields['audio_greeting'] = array (
+  $fields['field_voipnode_agreet'] = array (
     'label' => 'Audio Greeting',
     'field_name' => 'field_voipnode_agreet',
     'type' => 'filefield',
