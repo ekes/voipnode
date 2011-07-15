@@ -18,7 +18,7 @@ function voipnode_views_default_views() {
   $view->base_table = 'voipextension';
   $view->core = 6;
   $view->api_version = '2';
-  $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
+  $view->disabled = TRUE; /* Edit this to true to make a default view disabled initially */
   $handler = $view->new_display('default', 'Defaults', 'default');
   $handler->override_option('relationships', array(
     'voipnode' => array(
@@ -318,6 +318,23 @@ function voipnode_views_default_views() {
     ),
     'default' => 'eid',
   ));
+  $handler = $view->new_display('page', 'Page', 'page_1');
+  $handler->override_option('path', 'voip/extension/node');
+  $handler->override_option('menu', array(
+    'type' => 'none',
+    'title' => '',
+    'description' => '',
+    'weight' => 0,
+    'name' => 'navigation',
+  ));
+  $handler->override_option('tab_options', array(
+    'type' => 'none',
+    'title' => '',
+    'description' => '',
+    'weight' => 0,
+    'name' => 'navigation',
+  ));
+
 
   $views[$view->name] = $view;
 
