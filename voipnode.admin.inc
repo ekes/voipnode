@@ -10,7 +10,7 @@
  *
  * @todo
  */
-function voipnode_admin_settings($form, &$form_state) {
+function voipnode_admin_settings() {
   $form['temp'] = array(
     '#value' => '<p>TODO: Offer option to select valid scripts<br />And to bulk update a content type for missing extensions.</p>',
   );
