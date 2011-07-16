@@ -12,8 +12,7 @@ function voipnode_basic_script($node) {
   $body = strip_tags($node->body);
 
   $script = new VoipScript('voipnode_basic');
-  if (! empty($node->field_voipnode_agreet[0]['filepath'])) {
-    $greeting = file_create_url(field_file_urlencode_path($node->field_voipnode_agreet[0]['filepath']));
+  if ($greeting = voipnode_get_greeting($node)) {
     $script->addSay($greeting);
   }
   $script->addSay($body);

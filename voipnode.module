@@ -113,18 +113,6 @@ function voipnode_nodeapi(&$node, $op, $a3 = NULL, $a4 = NULL) {
 }
 
 /**
- * Implementation of hook_theme().
- * @todo with views
-function voipnode_theme() {
-  return array(
-    'voipnode_audio_player' => array(
-      'arguments' => array('file'),
-      'file' => 'voipnode.theme.inc'
-    ),
-  );
-}
-*/
-/**
  * Implementation of hook_views_api().
  */ 
 function voipnode_views_api() {
@@ -288,10 +276,7 @@ function voipnode_voipscript_get_script_names() {
  */
 function voipnode_voipextension_title_callback(&$extension) {
   $node = node_load($extension['module_id']);
-  if (isset($node->field_voipnode_aname[0])) {
-    return file_create_url(field_file_urlencode_path($node->field_voipnode_aname[0]['filepath']));
-  }
-  return $node->title;
+  return voipnode_get_title($node);
 }
 
 /**
@@ -302,10 +287,6 @@ function voipnode_voipextension_title_callback(&$extension) {
  */
 function voipnode_voipextension_description_callback(&$extension) {
   $node = node_load($extension['module_id']);
-  if (isset($node->field_voipnode_adesc[0])) {
-    return file_create_url(field_file_urlencode_path($node->field_voipnode_adesc[0]['filepath']));
-  }
-  return '';
 }
 
 /**
@@ -319,4 +300,53 @@ function voipnode_voipextension_script_callback(&$extension) {
     // fallback shouldn't be needed later.
     return 'voipnode_basic';
   }
+}
+
+/****
+ * API Functions
+ */
+
+/**
+ * Return title audio, or text.
+ *
+ * @param $node
+ *   Voipnode node object.
+ * @return
+ *   string absolute url to audio file, or text of title.
+ */
+function voipnode_get_title($node) {
+  if (isset($node->field_voipnode_aname[0])) {
+    return file_create_url(field_file_urlencode_path($node->field_voipnode_aname[0]['filepath']));
+  }
+  return $node->title;
+}
+
+/**
+ * Return description audio.
+ *
+ * @param $node
+ *   Voipnode node object.
+ * @return
+ *   string absolute url to description file.
+ */
+function voipnode_get_description($node) {
+  if (isset($node->field_voipnode_adesc[0])) {
+    return file_create_url(field_file_urlencode_path($node->field_voipnode_adesc[0]['filepath']));
+  }
+  return '';
+}
+
+/**
+ * Return greeting audio.
+ *
+ * @param $node
+ *   Voipnode node object.
+ * @return
+ *   string absolute url to greeting file.
+ */
+function voipnode_get_greeting($node) {
+  if (isset($node->field_voipnode_agreet[0])) {
+    return file_create_url(field_file_urlencode_path($node->field_voipnode_agreet[0]['filepath']));
+  }
+  return '';
 }
