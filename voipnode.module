@@ -97,14 +97,14 @@ function voipnode_nodeapi(&$node, $op, $a3 = NULL, $a4 = NULL) {
       $node->voipextension_number = $extension->eid;
       return;
     case 'load':
-      $extension = voipextension_load_bymoduleid('voipnode', $node->nid);
+      $extension = voipextension_load_by_module_id('voipnode', $node->nid);
       $node->voipextension_script = $extension['script'];
       $node->voipextension_number = $extension['eid'];
       $node->voipextension_listed = $extension['directory_type'];
       return;
     case 'delete':
       if (empty($node->extension_number)) {
-        $extension = voipextension_load_bymoduleid('voipnode', $node->nid);
+        $extension = voipextension_load_by_module_id('voipnode', $node->nid);
         $node->extension_number = $extension['eid'];
       }
       voipextension_delete($node->extension_number);
