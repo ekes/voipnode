@@ -16,7 +16,7 @@ function voipnode_basic_script($node) {
     $script->addSay($greeting);
   }
   $script->addSay($body);
-  $script->addReturn;
+  $script->addReturn();
 
   return $script;
 }
