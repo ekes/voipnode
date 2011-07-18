@@ -32,7 +32,7 @@ function _voipnode_node_type_form_alter(&$form, &$form_state, $form_id) {
 
   $form['voipnode'] = array(
     '#type' => 'fieldset',
-    '#title' => t('VoIPNode'),
+    '#title' => t('VoIP Node'),
     '#group' => 'additional_settings',
     '#collapsible' => TRUE,
     '#collapsed' => TRUE,
@@ -74,10 +74,9 @@ function _voipnode_node_type_form_alter(&$form, &$form_state, $form_id) {
 
   $default_script_name = variable_get('default_script_name_'. $content_type, variable_get('voipnode_script_name',''));
   $form['voipnode']['voipnode_settings']['default_script_name'] = array(
-    '#type' => 'textfield',
+    '#type' => 'select',
     '#title' => t('Default Script Name'),
-    '#maxlength' => 100,
-    '#size' => 30,
+    '#options' => VoipScript::getScriptNames(),
     '#default_value' => $default_script_name
   );
 
@@ -85,7 +84,7 @@ function _voipnode_node_type_form_alter(&$form, &$form_state, $form_id) {
   $form['voipnode']['voipnode_settings']['default_extension_status'] = array(
     '#type' => 'radios',
     '#title' => t('Default Extension status'),
-    '#options' => array(1 => t('Enabled'), 0 => t('Disabled')),
+    '#options' => array(1 => t('Listed in extension directories'), 0 => t('Not listed')),
     '#default_value' => $default_extension_status ? $default_extension_status : 0
   );
 
