@@ -140,8 +140,7 @@ function voipnode_form_alter(&$form, &$form_state, $form_id) {
     if (! variable_get('voipnode_use_'. $form['type']['#value'], FALSE) && in_array($form['#field']['field_name'], $field_names)) {
       // the can only be one value per voipnode_a* field.
       $form['field']['multiple']['#type'] = 'value';
-      $form['field']['multiple']['#default_value'] = 1;
-      $form['field']['multiple']['#value'] = 1;
+      $form['field']['multiple']['#default_value'] = 0;
       // the description doesn't make sense at the moment.
       $form['field']['description_field']['#type'] = 'hidden';
     }
