@@ -7,9 +7,9 @@ function voipuser_fieldgroup_default_groups() {
   $groups = array();
 
   // Exported group: group_voipnode_settings
-  $groups['profile-group_voipnode_settings'] = array(
+  $groups['voipuser-group_voipnode_settings'] = array(
     'group_type' => 'standard',
-    'type_name' => 'profile',
+    'type_name' => 'voipuser',
     'group_name' => 'group_voipnode_settings',
     'label' => 'VoIP Extension Settings',
     'settings' => array(

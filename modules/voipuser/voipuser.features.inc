@@ -15,10 +15,10 @@ function voipuser_ctools_plugin_api() {
  */
 function voipuser_node_info() {
   $items = array(
-    'profile' => array(
-      'name' => t('Profile'),
+    'voipuser' => array(
+      'name' => t('VoIP user extension'),
       'module' => 'features',
-      'description' => t('A user profile built as content.'),
+      'description' => t('Provides users with an extension node.'),
       'has_title' => '1',
       'title_label' => t('Title'),
       'has_body' => '1',

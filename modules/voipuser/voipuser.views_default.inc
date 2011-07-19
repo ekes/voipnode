@@ -11,16 +11,17 @@ function voipuser_views_default_views() {
   $view->name = 'voipuser_directory';
   $view->description = '';
   $view->tag = '';
+  $view->view_php = '';
   $view->base_table = 'users';
-  $view->core = 6;
-  $view->api_version = '2';
+  $view->is_cacheable = FALSE;
+  $view->api_version = 2;
   $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
   $handler = $view->new_display('default', 'Defaults', 'default');
   $handler->override_option('relationships', array(
     'content_profile_rel' => array(
       'label' => 'Content Profile',
       'required' => 1,
-      'type' => 'profile',
+      'type' => 'voipuser',
       'id' => 'content_profile_rel',
       'table' => 'users',
       'field' => 'content_profile_rel',

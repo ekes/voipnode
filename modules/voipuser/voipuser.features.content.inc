@@ -7,9 +7,9 @@ function voipuser_content_default_fields() {
   $fields = array();
 
   // Exported field: field_voipnode_adesc
-  $fields['profile-field_voipnode_adesc'] = array(
+  $fields['voipuser-field_voipnode_adesc'] = array(
     'field_name' => 'field_voipnode_adesc',
-    'type_name' => 'profile',
+    'type_name' => 'voipuser',
     'display_settings' => array(
       'label' => array(
         'format' => 'above',
@@ -56,9 +56,9 @@ function voipuser_content_default_fields() {
   );
 
   // Exported field: field_voipnode_agreet
-  $fields['profile-field_voipnode_agreet'] = array(
+  $fields['voipuser-field_voipnode_agreet'] = array(
     'field_name' => 'field_voipnode_agreet',
-    'type_name' => 'profile',
+    'type_name' => 'voipuser',
     'display_settings' => array(
       'label' => array(
         'format' => 'above',
@@ -105,9 +105,9 @@ function voipuser_content_default_fields() {
   );
 
   // Exported field: field_voipnode_aname
-  $fields['profile-field_voipnode_aname'] = array(
+  $fields['voipuser-field_voipnode_aname'] = array(
     'field_name' => 'field_voipnode_aname',
-    'type_name' => 'profile',
+    'type_name' => 'voipuser',
     'display_settings' => array(
       'label' => array(
         'format' => 'above',
