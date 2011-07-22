@@ -254,7 +254,11 @@ function voipnode_voipscript_load_script($script_name, $params = NULL) {
   if ($script_name == 'voipnode_basic') {
     module_load_include('inc', 'voipnode', 'voipnode.script');
     $node = node_load($params['nid']);
-    return voipnode_basic_script($node);
+    return _voipnode_get_basic_script($node);
+  }
+  if ($script_name == 'voipnode_directory') {
+    module_load_include('inc', 'voipnode', 'voipnode.script');
+    return _voipnode_get_directory_script($params['extension_type']);
   }
 }
 
@@ -264,6 +268,7 @@ function voipnode_voipscript_load_script($script_name, $params = NULL) {
 function voipnode_voipscript_get_script_names() {
   return array(
     'voipnode_basic',
+    'voipnode_directory',
   );
 }
 
