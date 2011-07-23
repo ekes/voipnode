@@ -119,7 +119,7 @@ function _voipnode_audio_fields_names() {
 function _voipnode_audio_fields_definitions($field_type = '') {
   $fields = array();
   $fields['field_voipnode_aname'] =  array (
-    'label' => 'Audio name',
+    'label' => 'Audio Name',
     'field_name' => 'field_voipnode_aname',
     'type' => 'filefield',
     'widget_type' => 'audiofield_widget',
