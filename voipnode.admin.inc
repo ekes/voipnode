@@ -10,7 +10,29 @@
  */
 function voipnode_admin_settings() {
   $form = array();
-  return $form;
+  $form['voipnode_valid_script_names'] = array(
+    '#title' => t('Valid scripts'),
+    '#type' => 'checkboxes',
+    '#options' => VoipScript::getScriptNames(),
+    '#default_value' => variable_get('voipnode_valid_script_names', array()),
+    '#description' => t('Scripts that will be available for VoIP nodes. You can select multiple scripts.'),
+  );
+  $form['voipnode_default_script_name'] = array(
+    '#title' => t('Default script'),
+    '#type' => 'select',
+    '#options' => VoipScript::getScriptNames(),
+    '#default_value' => variable_get('voipnode_default_script_name', ''),
+    '#description' => t('The script, of those valid, that will be used by default.'),
+  );
+  $form['voipnode_default_extension_status'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Listed'),
+    '#description' => t('The default setting for if the extension is listed in a directory.'),
+    '#default_value' => variable_get('voipnode_default_extension_status', 0),
+    '#return_value' => 1,
+  );
+  $form['array_filter'] = array('#type' => 'hidden');
+  return system_settings_form($form);
 }
 
 /**
@@ -172,7 +194,7 @@ function _voipnode_node_type_form_alter(&$form, &$form_state, $form_id) {
   $form['voipnode']['voipnode_settings']['voipnode_default_script_name'] = array(
     '#type' => 'select',
     '#title' => t('Default Script Name'),
-    '#options' => VoipScript::getScriptNames(),
+    '#options' => variable_get('voipnode_valid_script_names', VoipScript::getScriptNames()),
     '#default_value' => $default_script_name,
   );
 
