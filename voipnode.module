@@ -84,6 +84,7 @@ function voipnode_nodeapi(&$node, $op, $a3 = NULL, $a4 = NULL) {
         'extension_type' => $node->type,
         'directory_type' => (empty($node->voipextension_listed)) ? VOIPEXTENSION_UNLISTED : VOIPEXTENSION_LISTED,
         'script' => $node->voipextension_script,
+        'enabled' => $node->status,
       );
       if (! empty($node->voipextension_number)) {
         $extension['eid'] = $node->voipextension_number;
@@ -94,7 +95,7 @@ function voipnode_nodeapi(&$node, $op, $a3 = NULL, $a4 = NULL) {
       else {
         voipextension_update($extension, $node->voipextension_number_original);
       }
-      $node->voipextension_number = $extension->eid;
+      $node->voipextension_number = $extension['eid'];
       return;
     case 'load':
       $extension = voipextension_load_by_module_id('voipnode', $node->nid);
