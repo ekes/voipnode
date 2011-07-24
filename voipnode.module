@@ -237,12 +237,12 @@ function voipnode_preprocess_content_field_overview_form(&$variables) {
     'field_voipnode_agreet',
   );
   foreach ($variables['rows'] as $index => $row) {
-    if (in_array($row->field_name, $escape_fields_array)) {
+    if (isset($row->field_name) && in_array($row->field_name, $escape_fields_array)) {
       unset($variables['rows'][$index]);
     }
 
     if ($row->row_type == 'group' && isset($row->group_name) && ($row->group_name == 'group_voipnode_settings')) {
-      unset($variables['rows'][$index]->remove);
+      $variables['rows'][$index]->remove = '';
     }
   }
 }
