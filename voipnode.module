@@ -203,14 +203,14 @@ function _voipnode_node_edit_form_alter(&$form, &$form_state, $form_id) {
     '#title' => t('Script'),
     '#description' => t('VOIP script to use for this node.'),
     '#options' => VoipScript::getScriptNames(),
-    '#default_value' => (! empty($node->voipextension_script)) ? $node->voipextension_script : variable_get('default_script_name_'. $content_type, variable_get('voipnode_script_name','')),
+    '#default_value' => (! empty($node->voipextension_script)) ? $node->voipextension_script : variable_get('voipnode_default_script_name_'. $content_type, variable_get('voipnode_default_script_name','')),
   );
 
   $form['voipextension_listed'] = array(
     '#type' => 'checkbox',
     '#title' => t('Listed'),
     '#description' => t('List the extension in a directory.'),
-    '#default_value' => (isset($node->voipextension_listed)) ? $node->voipextension_listed : variable_get('default_extension_status_'. $content_type, variable_get('voipnode_status', 0)),
+    '#default_value' => (isset($node->voipextension_listed)) ? $node->voipextension_listed : variable_get('voipnode_default_extension_status_'. $content_type, variable_get('voipnode_status', 0)),
     '#return_value' => 1,
   );
 }
