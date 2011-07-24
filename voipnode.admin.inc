@@ -250,6 +250,9 @@ function _voipnode_node_type_form_submit($form, &$form_state) {
 
   $content_type = $form_state['values']['type'];
   if ($form_state['values']['voipnode_use']) {
+    // Enable voipnode on type. add fields and group.
+    // Adding extensions to existing nodes is an admin task. 
+    // Using the admin task existing disabled extensions can all be defaulted to enabled.
     _voipnode_change_audio_fields_status($content_type, 1);
     $group = _voipnode_extension_group_defintion();
     fieldgroup_save_group($content_type, $group);
@@ -272,7 +275,10 @@ function _voipnode_node_type_form_submit($form, &$form_state) {
     drupal_set_message(t('VoIP Extension field have been associated with %content_type', array('%content_type' => $content_type)));
   }
   else {
+    // Disable voipnode on type. Hide the audio fields, remove the fieldset, disable the extensions.
     _voipnode_change_audio_fields_status($content_type, 0);
     fieldgroup_delete($content_type, 'group_voipnode_settings');
+    voipextension_disable_module_extensions('voipnode', $content_type);
+    drupal_set_message(t('VoIP Extensions have been disabled for %content_type', array('%content_type' => $content_type)));
   }
 }
