@@ -25,7 +25,7 @@ function voipnode_admin_reindex_confirm_form($form_state) {
     }
   }
   if (count($options)) {
-
+    // only offer the form if there are some content-types used for extensions.
     $form = array();
     $form['content_type'] = array(
       '#type' => 'select',
@@ -66,6 +66,10 @@ function voipnode_admin_reindex_batch($type) {
 
 /**
  * Batch operation callback.
+ *
+ * Calls up the next (100) nodes of the $content_type, sets defaults and calls our nodeapi update.
+ * This will set defaults on all nodes of the content type, and add extensions to any that
+ * don't have one yet.
  *
  * @todo check the batch counting logic.
  *
