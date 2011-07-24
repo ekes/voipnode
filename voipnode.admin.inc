@@ -18,6 +18,102 @@ function voipnode_admin_settings() {
 }
 
 /**
+ * Menu callback; confirmation form for reindexing extensions to nodes by content-type.
+ */
+function voipnode_admin_reindex_confirm_form($form_state) {
+  $types = node_get_types();
+  $options = array();
+  foreach ($types as $node_type => $type_details) {
+    if (variable_get('voipnode_use_' . $node_type, FALSE)) {
+      $options[$node_type] = $type_details->name;
+    }
+  }
+  if (count($options)) {
+
+    $form = array();
+    $form['content_type'] = array(
+      '#type' => 'select',
+      '#options' => $options,
+      '#title' => t('Content type to reindex'),
+    );
+    return confirm_form($form, t('Reindex nodes with extensions'), '/admin/settings/voipnode', t('This adds extensions to any nodes in the content type that do no not have them yet, and resets all nodes to the content-type defaults.'));
+  }
+  else {
+    return array('error' => array('#value' => t('There are no content types enabled as using VoIP extensions.')));
+  }
+}
+
+/**
+ * @see voipnode_admin_reindex_confirm_form().
+ */
+function voipnode_admin_reindex_confirm_form_submit($form, &$form_state) {
+  voipnode_admin_reindex_batch($form_state['values']['content_type']);
+  $form_state['redirect'] = 'admin/settings/voipnode';
+}
+
+/**
+ * Set and update extensions for all nodes in the type.
+ *
+ * There isn't really any way round going through each node in turn, so batching the job.
+ */
+function voipnode_admin_reindex_batch($type) {
+  $batch = array(
+    'title' => t('Resetting extensions for %type', array('%type' => $type)),
+    'operations' => array(
+      array('_voipnode_admin_reindex_batch', array($type)),
+    ),
+    'finished' => '_voipnode_admin_reindex_batch_finished',
+    'file' => __FILE__,
+  );
+  batch_set($batch);
+}
+
+/**
+ * Batch operation callback.
+ *
+ * @todo check the batch counting logic.
+ *
+ * @see voipnode_admin_reindex_batch().
+ */
+function _voipnode_admin_reindex_batch($content_type, &$context) {
+  if (empty($context['sandbox'])) {
+    // Initiate multistep processing.
+    $context['sandbox']['progress'] = 0;
+    $context['sandbox']['current_node'] = 0;
+    $context['sandbox']['max'] = db_result(db_query("SELECT COUNT(DISTINCT nid) FROM {node} WHERE type = '%s'", $content_type));
+  }
+  $limit = 100;
+  $result = db_query_range("SELECT nid FROM {node} WHERE nid > %d AND type = '%s' ORDER BY nid ASC", $context['sandbox']['current_node'], $content_type, 0, $limit);
+  while ($row = db_fetch_array($result)) {
+    $node = node_load($row['nid'], NULL, TRUE);
+    $node->voipextension_listed = variable_get('default_extension_status_'. $content_type, variable_get('voipnode_status', 0));
+    $node->voipextension_script = variable_get('default_script_name_'. $content_type, variable_get('voipnode_script_name',''));
+    // we only need our part of the hook_nodeapi
+    voipnode_nodeapi($node, 'update');
+    $context['sandbox']['progress']++;
+    $context['sandbox']['current_node'] = $row['nid'];
+  }
+
+  if ($context['sandbox']['progress'] != $context['sandbox']['max']) {
+    $context['finished'] = $context['sandbox']['progress'] / $context['sandbox']['max'];
+  }
+}
+
+/**
+ * Batch finished callback.
+ *
+ * @see voipnode_admin_reindex_batch().
+ */
+function _voipnode_admin_reindex_batch_finished($success, $results, $operations) {
+  if ($success) {
+    drupal_set_message(t('The extensions have been reindexed'));
+  }
+  else {
+    drupal_set_message(t('There was an error reindexing the extensions'), 'error');
+  }
+}
+
+/**
  * Alter node type settings form.
  *
  * Add voip extension option to content type admin form.

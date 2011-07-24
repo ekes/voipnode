@@ -12,12 +12,25 @@
 function voipnode_menu() {
   $items = array();
   $items['admin/settings/voipnode'] = array(
-      'title' => 'VoIP Extensions',
-      'page callback' => 'drupal_get_form',
-      'page arguments' => array('voipnode_admin_settings'),
-      'access arguments' => array('administer voipnode settings'),
-      'file' => 'voipnode.admin.inc',
-      );
+    'title' => 'VoIP Extensions',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('voipnode_admin_settings'),
+    'access arguments' => array('administer voipnode settings'),
+    'file' => 'voipnode.admin.inc',
+  );
+  $items['admin/settings/voipnode/defaults'] = array(
+    'title' => 'Defaults',
+    'type' => MENU_DEFAULT_LOCAL_TASK,
+    'weight' => -1,
+  );
+  $items['admin/settings/voipnode/reindex'] = array(
+    'title' => 'Reindex',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('voipnode_admin_reindex_confirm_form'),
+    'access arguments' => array('administer voipnode settings'),
+    'file' => 'voipnode.admin.inc',
+    'type' => MENU_LOCAL_TASK,
+  );
   return $items;
 } 
 
@@ -101,6 +114,7 @@ function voipnode_nodeapi(&$node, $op, $a3 = NULL, $a4 = NULL) {
       $extension = voipextension_load_by_module_id('voipnode', $node->nid);
       $node->voipextension_script = $extension['script'];
       $node->voipextension_number = $extension['eid'];
+      $node->voipextension_number_original = $extension['eid'];
       $node->voipextension_listed = $extension['directory_type'];
       return;
     case 'delete':
