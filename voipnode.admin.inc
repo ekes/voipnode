@@ -9,6 +9,7 @@
  * Menu callback; admin settings form.
  */
 function voipnode_admin_settings() {
+  drupal_add_js(drupal_get_path('module', 'voipnode') . '/voipnode.admin.js');
   $form = array();
   $form['voipnode_valid_script_names'] = array(
     '#title' => t('Valid scripts'),
