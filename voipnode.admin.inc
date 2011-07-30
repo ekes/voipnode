@@ -142,7 +142,7 @@ function _voipnode_admin_reindex_batch_finished($success, $results, $operations)
  * Add voip extension option to content type admin form.
  * @see _voipnode_node_type_form_submit().
  */
-function _voipnode_node_type_form_alter(&$form, &$form_state, $form_id) {
+function _voipnode_form_node_type_form_alter(&$form, &$form_state) {
   $voipnode_weight = 33; // default weight of the fieldset.
   $content_type = $form['#node_type']->type;
   if (isset($form['submit']['#weight'])) {
@@ -235,13 +235,13 @@ function _voipnode_node_type_form_alter(&$form, &$form_state, $form_id) {
       '#value' => $voipnode_configuration_options
     );
   }
-  $form['#submit'][] = 'voipnode_node_type_form_submit';
+  $form['#submit'][] = 'voipnode_form_node_type_form_submit';
 }
 
 /**
  * Submit callback for _voipnode_node_type_form_submit().
  */
-function _voipnode_node_type_form_submit($form, &$form_state) {
+function _voipnode_form_node_type_form_submit($form, &$form_state) {
   module_load_include('inc', 'voipnode', 'voipnode.cck_fields');
 
   // VoIP Extension field doesn't exists yet.

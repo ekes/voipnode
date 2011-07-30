@@ -160,18 +160,24 @@ function voipnode_form_alter(&$form, &$form_state, $form_id) {
       $form['field']['description_field']['#type'] = 'hidden';
     }
   }
-  elseif ($form_id == 'node_type_form') {
-    module_load_include('inc', 'voipnode', 'voipnode.admin');
-    _voipnode_node_type_form_alter($form, $form_state, $form_id);
-  }
+}
+
+/**
+ * Implementation of hook_form_FORM_ID_alter().
+ *
+ * Content type administration.
+ */
+function voipnode_form_node_type_form_alter(&$form, &$form_state) {
+  module_load_include('inc', 'voipnode', 'voipnode.admin');
+  _voipnode_form_node_type_form_alter($form, $form_state);
 }
 
 /**
  * Submit callback for _voipnode_node_type_form_submit().
  */
-function voipnode_node_type_form_submit($form, &$form_state) {
+function voipnode_form_node_type_form_submit($form, &$form_state) {
   module_load_include('inc', 'voipnode', 'voipnode.admin');
-  _voipnode_node_type_form_submit($form, $form_state);
+  _voipnode_form_node_type_form_submit($form, $form_state);
 }
 
 /**
