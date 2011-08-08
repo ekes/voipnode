@@ -33,7 +33,23 @@ function voipnode_admin_settings() {
     '#return_value' => 1,
   );
   $form['array_filter'] = array('#type' => 'hidden');
-  return system_settings_form($form);
+  $form = system_settings_form($form);
+  $form['#submit'][] = 'voipnode_admin_settings_submit';
+  return $form;
+}
+
+/**
+ * voipnode_admin_settings() form additional submit handler.
+ *
+ * $form['array_filter'] = array('#type' => 'hidden'); uses numeric keys
+ * the id as key and value makes life a lot easier.
+ */
+function voipnode_admin_settings_submit(&$form, &$form_state) {
+  $valid = array();
+  foreach($form_state['values']['voipnode_valid_script_names'] as $id => $value) {
+    if ($value && isset($form['voipnode_valid_script_names'][$id])) { $valid[$id] = $id; }
+  }
+  variable_set('voipnode_valid_script_names', $valid);
 }
 
 /**
